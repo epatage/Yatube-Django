@@ -53,7 +53,8 @@ class GroupAndPostURLTests(TestCase):
         for address in url_names:
             with self.subTest(address=address):
                 # Проверка для не авторизированного пользователя
-                # response = self.guest_client.status_code, HTTPStatus.OK)
+                response = self.guest_client.get(address)
+                self.assertEqual(response.status_code, HTTPStatus.OK)
                 # Проверка для авторизированного пользователя
                 response = self.authorized_client_auth.get(address)
                 self.assertEqual(response.status_code, HTTPStatus.OK)
