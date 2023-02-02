@@ -1,8 +1,9 @@
-from django.contrib.auth import get_user_model
-from django.test import TestCase, Client
 from http import HTTPStatus
 
-from ..models import Post, Group, Comment
+from django.contrib.auth import get_user_model
+from django.test import Client, TestCase
+
+from ..models import Comment, Group, Post
 
 User = get_user_model()
 
@@ -26,6 +27,12 @@ class GroupAndPostURLTests(TestCase):
             group=cls.group,
         )
 
+        cls.comment = Comment.objects.create(
+            author=cls.user,
+            text='Комментарий',
+            post=cls.post,
+        )
+
     def setUp(self):
         self.guest_client = Client()
 
@@ -34,12 +41,6 @@ class GroupAndPostURLTests(TestCase):
 
         self.authorized_client_not_auth = Client()
         self.authorized_client_not_auth.force_login(self.user_not_auth)
-
-        self.comment = Comment.objects.create(
-            author=self.user,
-            text='Комментарий',
-            post=self.post,
-        )
 
     def test_urls_exists_for_all_users_with_HTTPStatus_OK(self):
         """URL-адреса доступны всем пользователям."""

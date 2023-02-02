@@ -1,5 +1,6 @@
-from django.db import models
 from django.contrib.auth import get_user_model
+from django.db import models
+
 from core.models import CreatedModel
 
 User = get_user_model()
@@ -89,3 +90,11 @@ class Follow(models.Model):
         related_name='following',
         verbose_name='Автор',
     )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'author'],
+                name='unique_follow',
+            )
+        ]
